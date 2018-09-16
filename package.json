@@ -1,0 +1,14 @@
+{
+  "name": "App Name",
+  "description": "App Description",
+  "version": "0.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "^3.2.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "jasmine"
+  },
+  "main": "index.js"
+}
