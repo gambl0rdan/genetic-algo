@@ -1,6 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
- <head>
- 	<script type="text/javascript" src="algos.js"></script>
- </head>
+<meta charset="utf-8">
+
+<body>
+	<link rel="stylesheet" href="styles.css">
+	<script type="text/javascript" src="algos.js"></script>
+	<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="trip_data.js"></script>
+	<script src="https://unpkg.com/topojson-client@3"></script>
+	<script>
+	let width = window.innerWidth,
+	    height = window.innerHeight,
+	    centered,
+	    clicked_point;
+
+	let projection = d3.geoMercator()
+	   				   .translate([width / 2.2, height / 1.5]);
+	    
+	let plane_path = d3.geoPath()
+	        		   .projection(projection);
+
+	let svg = d3.select("body").append("svg")
+							   .attr("width", width)
+							   .attr("height", height)
+							   .attr("class", "map");
+
+	var rectangle = svg.append("rect")
+	                            .attr("x", 0)
+	                            .attr("y", 0)
+	                            .attr("width", width)
+	                            .attr("height", height)
+	                            .attr("fill", "black");
+	    
+	let g = svg.append("g");
+	let path = d3.geoPath()
+	    .projection(projection);
+	    
+	// load and display the World
+	d3.json("https://unpkg.com/world-atlas@1/world/110m.json", function(error, topology) {
+	    g.selectAll("path")
+	      .data(topojson.feature(topology, topology.objects.countries)
+	          .features)
+	      .enter()
+	      .append("path")
+	      .attr("d", path)
+	      .attr("fill", "#787878")
+	      ;
+	 });
+	 
+</script>
+</body>
 </html>

@@ -1,8 +1,12 @@
-var csv = require('csv');
-var fs = require('fs');
+var csv = require('csv'); // Handle CSVs
+var fs = require('fs'); //Mangaes file ops from JS core
+
 
 var CityLocation = require('./city_location.js').CityLocation;
- 
+
+
+// Creates an N * N matrix of distances between each city
+// inefficient but double loopd through our tour
 function getDistanceMatrix(locations, tourSize){
 	var distances =  [...Array(tourSize)].map(e => Array(tourSize));
 	for(let y = 0; y < tourSize; y++) {
@@ -17,6 +21,7 @@ function getDistanceMatrix(locations, tourSize){
 	return distances;
 }
 
+// Absolute Distance between 2 cities
 function distance(a, b) {
 	 ac = Math.abs(b.lat - a.lat);
 	 cb = Math.abs(b.lon - a.lon);

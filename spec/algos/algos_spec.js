@@ -19,9 +19,9 @@ describe("Algos", function() {
   let distArray = [0.35439628592692346, 0.7087925718538469, 0.8842187333876741, 1];
 
   let settings = {
-      mutateProb : 0.25,
-      lessFitProb : 0.35,
-      populationSize : 4
+      mutateProb : 0.25, //Probability that after crossover our tours will mutate (swap 2 entries)
+      lessFitProb : 0.35, //We have a dist function, but add further randomness to increase diversity with a less fit factor
+      populationSize : 4 // How many tours per generation
   }
 
   beforeEach(function() {
