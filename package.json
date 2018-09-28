@@ -3,11 +3,14 @@
   "description": "Lets have run with GA",
   "version": "1.0.0",
   "dependencies": {
-    "csv": "^3.1.0"
+    "d3": "^5.7.0",
+    "webpack": "^4.20.2"
   },
   "devDependencies": {
+    "html-webpack-plugin": "^3.2.0",
     "jasmine": "^3.2.0",
-    "jasmine-core": "^3.2.1"
+    "jasmine-core": "^3.2.1",
+    "webpack-dev-server": "^3.1.9"
   },
   "scripts": {
     "start": "node ./src/index.js",

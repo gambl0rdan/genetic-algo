@@ -8,3 +8,4 @@ class CityLocation {
 }
 	
 module.exports.CityLocation=CityLocation;
+// export default CityLocation;

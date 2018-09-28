@@ -41,10 +41,11 @@ class GeneticAlgo {
 		
 		let population = this.initialPopulation;
 		while (this.generation < loopCount) {
+			// everytime you breed, population returns a new value/population
 			population = this.breed(population, this.distArray);
 			population.sort((a,b) => this.calculateFitness(a)- this.calculateFitness(b));
 			
-			let genFittestRoute = population[0];
+			let genFittestRoute = population[0]; //[1,6,4, 9]
 			let genFittestPath = this.calculateFitness(genFittestRoute);
 			
 			if(genFittestPath < curFittestPath){
@@ -313,4 +314,7 @@ crossover(x, y) {
 	} 
 }
 
-module.exports.GeneticAlgo = GeneticAlgo;
+// module.exports.GeneticAlgo = GeneticAlgo;
+export default GeneticAlgo;
+
+
