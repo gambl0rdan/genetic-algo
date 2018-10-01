@@ -7,7 +7,7 @@ import CSVLoader from './data.js';
 
 let genAlgo;
 let tourSize = 20;
-let runCount = 200;
+let runCount = 20;
 
 
 // this is the main methed once all the data loaded
@@ -21,6 +21,11 @@ let loadRespCallback = (cities, vectors) => {
 
 
 	let algo = new GeneticAlgo(vectors, settings);  
+	let results = {
+		curFittestRoute : [],
+		curFittestPath : Number.MAX_SAFE_INTEGER
+	};
+
 	algo.initialise();
 
 	let routePath = d3.geoPath()
@@ -59,32 +64,42 @@ let loadRespCallback = (cities, vectors) => {
 					.attr("stroke", "#FFFAF0")
 					.attr("stroke-width", 3)
 			}
-			setTimeout(display, i*100); //set timeout to draw a line between 2 cities
+			setTimeout(display, i*5); //set timeout to draw a line between 2 cities
 		}
 	}
 
-	let getNextGen = (algo) => {
+	let getNextGen = (algo, results) => {
 		let population;
-		let currentGeneration = algo.generation;
 
 		if (algo.generation == 0) {
 			population = algo.initialPopulation;
-		} 
+		} else if (algo.generation == runCount) {
+			clearInterval(runTimer)
+			return; //TODO: Show final results
+		} else {
+			population = algo.population;
+		}
 
-		let runIterationRes = algo.runIteration(population, currentGeneration, runCount);
+
+		let runIterationRes = algo.runIteration(population);
 
 
 		let newPopulation = runIterationRes[0];
 		let genFittestPath = runIterationRes[1];
-
 		let genFittestRoute = newPopulation[0];
-		// newPopulation, genFittestPath
-		currentGeneration++;
 
-		setInterval(displayAllLines(genFittestRoute), 100);
+		if(genFittestPath < results.curFittestPath){
+			results.curFittestPath= genFittestPath;
+			results.curFittestRoute = genFittestRoute; 	
+		}
+	
+		console.log(`Generation [${algo.generation}]. Fittest of gen [${genFittestPath}], Fittest overall [${results.curFittestPath}]`);
+		
+		displayAllLines(results.curFittestRoute);
+		// displayAllLines(genFittestRoute);
 	}
 
-	setTimeout(getNextGen(algo),100);
+	let runTimer = setInterval(getNextGen, 250, algo, results);
 	
 	// let finalResult = algo.runAsync(runCount, (route) => setTimeout(displayAllLines, 1000, route));
 	// let finalResult = algo.runAsync(runCount, displayAllLines);
@@ -121,9 +136,6 @@ let loadRespCallback = (cities, vectors) => {
 	  // .attr("debug", (row) => JSON.stringify(row))
 	  // .attr("debug2", (row) => JSON.stringify(projection([+row.lng, +row.lat])))
 	  // .attr("debug3", (row) => JSON.stringify([+row.lng, +row.lat]))
-
-	// Run the best route forever at the pre-determined itnerval period
-	// setInterval(displayAllLines, bestRoute.length*100 + 100);
 	
 }
 
@@ -139,10 +151,9 @@ let projection = d3.geoEquirectangular()
 					.translate([width/2	, height/2]);
 
 
-   				   
-    
-// let plane_path = d3.geoPath()
-//         		   .projection(projection);
+   				  
+let plane_path = d3.geoPath()
+        		   .projection(projection);
 
 let svg = d3.select("#map").append("svg")
 						   .attr("width", width)

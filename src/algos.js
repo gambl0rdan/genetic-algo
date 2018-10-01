@@ -62,28 +62,23 @@ class GeneticAlgo {
 		return curFittestRoute;
 	}
 
-	runIteration(population, currentGeneration, loopCount) {
-		let curFittestRoute;
-		let curFittestPath = Number.MAX_SAFE_INTEGER;
-
-		while (currentGeneration < loopCount) {
-			let newPopulation = this.breed(population, this.distArray);
-			newPopulation.sort((a,b) => this.calculateFitness(a)- this.calculateFitness(b));
-			
-			let genFittestRoute = newPopulation[0]; //[1,6,4, 9]
-			let genFittestPath = this.calculateFitness(genFittestRoute);
-			
-			if(genFittestPath < curFittestPath){
-				curFittestPath = genFittestPath;
-				curFittestRoute = genFittestRoute; 	
-			}
+	runIteration(population) {
 		
-			console.log(`Generation [${this.generation}]. Fittest of gen [${genFittestPath}], Fittest overall [${curFittestPath}]`);
-		}
-
+		let newPopulation = this.breed(population, this.distArray);
+		newPopulation.sort((a,b) => this.calculateFitness(a)- this.calculateFitness(b));
+		
+		let genFittestRoute = newPopulation[0]; //[1,6,4, 9]
+		let genFittestPath = this.calculateFitness(genFittestRoute);
+		
+		// if(genFittestPath < curFittestPath){
+		// 	curFittestPath = genFittestPath;
+		// 	curFittestRoute = genFittestRoute; 	
+		// }
+	
+		// console.log(`Generation [${this.generation}]. Fittest of gen [${genFittestPath}], Fittest overall [${curFittestPath}]`);
 		
 		// this.generation++;
-
+		this.population = newPopulation;
 		return [newPopulation, genFittestPath];
 
 	}
