@@ -41,7 +41,9 @@ class GeneticAlgo {
 		
 		let population = this.initialPopulation;
 		while (this.generation < loopCount) {
-			// everytime you breed, population returns a new value/population
+			// everytime you breed, population value which you golt back from this.initialPopulation
+			// returns a new value/population
+			// and we assign it back to population and use it for the next go
 			population = this.breed(population, this.distArray);
 			population.sort((a,b) => this.calculateFitness(a)- this.calculateFitness(b));
 			
@@ -58,6 +60,26 @@ class GeneticAlgo {
 		}
 
 		return curFittestRoute;
+	}
+
+	runIteration(population) {
+
+		let newPopulation = this.breed(population, this.distArray);
+		newPopulation.sort((a,b) => this.calculateFitness(a)- this.calculateFitness(b));
+		
+		let genFittestRoute = newPopulation[0]; //[1,6,4, 9]
+		let genFittestPath = this.calculateFitness(genFittestRoute);
+		
+		if(genFittestPath < curFittestPath){
+			curFittestPath = genFittestPath;
+			curFittestRoute = genFittestRoute; 	
+		}
+	
+		console.log(`Generation [${this.generation}]. Fittest of gen [${genFittestPath}], Fittest overall [${curFittestPath}]`);
+		this.generation++;
+
+		return [newPopulation, genFittestPath];
+
 	}
 
 

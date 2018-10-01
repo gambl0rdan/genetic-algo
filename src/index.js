@@ -3,11 +3,11 @@ import GeneticAlgo from './algos.js';
 // var loaders = require('./csv_loader.js');
 // var loaders = require('./data.js');
 import CSVLoader from './data.js';
-// 
+// import { geoPath } from 'd3-geo';
 
 let genAlgo;
-let tourSize = 30;
-let runCount = 2000;
+let tourSize = 20;
+let runCount = 200;
 
 
 // this is the main methed once all the data loaded
@@ -19,17 +19,80 @@ let loadRespCallback = (cities, vectors) => {
     }
 
 
+
 	let algo = new GeneticAlgo(vectors, settings);  
 	algo.initialise();
+
+	let routePath = d3.geoPath()
+	    .projection(projection);
+
 	
-	let finalResult = algo.run(runCount);
+
+	   //runNextGen
+	   //Call the breed and get the next best route
+	   //call displayAllLines
+	let connectingLines = svg.append("g");
+
+	let displayAllLines = (genFittestRoute) => {
+		connectingLines.html(""); //clear the Line String
+		let genFittestCoords = genFittestRoute.map(route => cities[route]);
+
+		for(let i=0; i<genFittestCoords.length; i++) { 
+			let citiesPair = genFittestCoords.slice(i, i+2);
+			
+
+			let coordPair;
+
+			// extra check to make sure the last country will be draw connected with the first one
+			if (i < genFittestCoords.length - 1){
+			 	coordPair = citiesPair.map((city) => [city.lon, city.lat]);
+			} else{
+				coordPair = [[genFittestCoords[0].lon, genFittestCoords[0].lat], [genFittestCoords[i].lon, genFittestCoords[i].lat]]
+			}
+
+			let display = () => {
+				connectingLines
+				    .append("path")
+					.datum({type: "LineString", coordinates: coordPair})
+					.attr("d", routePath)
+					.attr("fill", "none")
+					.attr("stroke", "#FFFAF0")
+					.attr("stroke-width", 3)
+			}
+			setTimeout(display, i*10); //set timeout to draw a line between 2 cities
+		}
+	}
+
+	let getNextGen = (algo) => {
+		let population;
+
+		if (algo.generation == 0) {
+			population = algo.initialPopulation;
+		}
+
+		let runIterationRes = algo.runIteration(population);
+		let newPopulation = runIterationRes[0];
+		let genFittestPath = runIterationRes[1];
+
+		let genFittestRoute = newPopulation[0];
+		// newPopulation, genFittestPath
+
+
+		displayAllLines(genFittestRoute);
+	}
+
+	setInterval(getNextGen, bestRoute.length*100 + 100, finalResult);
+	// let finalResult = algo.runAsync(runCount, (route) => setTimeout(displayAllLines, 1000, route));
+	// let finalResult = algo.runAsync(runCount, displayAllLines);
+	
+
 	console.log(`Final result after (${runCount}) runs was: [${finalResult}]`);
 
 	let cityNames = finalResult.map(c =>cities[c].name);
 	console.log(`... as country names was:\n (${cityNames}`);
 
 
-
+	let finalResult = algo.run(runCount);
 	let bestRoute = finalResult.map(city => cities[city]);
 
 
@@ -46,46 +109,9 @@ let loadRespCallback = (cities, vectors) => {
 	  // .attr("debug2", (row) => JSON.stringify(projection([+row.lng, +row.lat])))
 	  // .attr("debug3", (row) => JSON.stringify([+row.lng, +row.lat]))
 
- 
-	let routePath = d3.geoPath()
-	    .projection(projection);
-
-	let connectingLines = svg.append("g");
-
-	let displayAllLines = () => {
-		connectingLines.html(""); //clear the Line String
-
-		for(let i=0; i<bestRoute.length; i++) { 
-			let citiesPair = bestRoute.slice(i, i+2);
-			
-
-			let coordPair;
-
-			// extra check to make sure the last country will be draw connected with the first one
-			
-
-			if (i < bestRoute.length - 1){
-			 	coordPair = citiesPair.map((row) => [row.lon, row.lat]);
-			} else{
-				coordPair = [[bestRoute[0].lon, bestRoute[0].lat], [bestRoute[i].lon, bestRoute[i].lat]]
-			}
-
-			let display = () => {
-				connectingLines
-				    .append("path")
-					.datum({type: "LineString", coordinates: coordPair})
-					.attr("d", routePath)
-					.attr("fill", "none")
-					.attr("stroke", "#FFFAF0")
-					.attr("stroke-width", 3)
-			}
-			setTimeout(display, i*10); //set timeout to draw a line between 2 cities
-		}
-	}
-
-	setInterval(displayAllLines, bestRoute.length*100 + 100);
+	// Run the best route forever at the pre-determined itnerval period
+	// setInterval(displayAllLines, bestRoute.length*100 + 100);
 	
-
 }
 
 let loader = new CSVLoader();
@@ -97,25 +123,26 @@ let width = window.innerWidth,
     clicked_point;
 
 let projection = d3.geoEquirectangular()
-					.translate([width/2	, height/2]);;
+					.translate([width/2	, height/2]);
 
 
    				   
     
-let plane_path = d3.geoPath()
-        		   .projection(projection);
+// let plane_path = d3.geoPath()
+//         		   .projection(projection);
 
-let svg = d3.select("body").append("svg")
+let svg = d3.select("#map").append("svg")
 						   .attr("width", width)
 						   .attr("height", height)
 						   .attr("class", "map");
 
-var rectangle = svg.append("rect")
+let rectangle = svg.append("rect")
                             .attr("x", 0)
                             .attr("y", 0)
                             .attr("width", width)
                             .attr("height", height)
                             .attr("fill", "black");
+
     
 let g = svg.append("g");
 let path = d3.geoPath()
@@ -131,7 +158,7 @@ d3.json("https://unpkg.com/world-atlas@1/world/110m.json", function(error, topol
       .attr("d", path)
       .attr("fill", "#787878")
       ;
- });
+});
 
 
 
