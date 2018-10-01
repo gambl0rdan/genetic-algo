@@ -59,41 +59,54 @@ let loadRespCallback = (cities, vectors) => {
 					.attr("stroke", "#FFFAF0")
 					.attr("stroke-width", 3)
 			}
-			setTimeout(display, i*10); //set timeout to draw a line between 2 cities
+			setTimeout(display, i*100); //set timeout to draw a line between 2 cities
 		}
 	}
 
 	let getNextGen = (algo) => {
 		let population;
+		let currentGeneration = algo.generation;
 
 		if (algo.generation == 0) {
 			population = algo.initialPopulation;
-		}
+		} 
 
-		let runIterationRes = algo.runIteration(population);
+		let runIterationRes = algo.runIteration(population, currentGeneration, runCount);
+
+
 		let newPopulation = runIterationRes[0];
 		let genFittestPath = runIterationRes[1];
 
 		let genFittestRoute = newPopulation[0];
 		// newPopulation, genFittestPath
+		currentGeneration++;
 
-
-		displayAllLines(genFittestRoute);
+		setInterval(displayAllLines(genFittestRoute), 100);
 	}
 
-	setInterval(getNextGen, bestRoute.length*100 + 100, finalResult);
+	setTimeout(getNextGen(algo),100);
+	
 	// let finalResult = algo.runAsync(runCount, (route) => setTimeout(displayAllLines, 1000, route));
 	// let finalResult = algo.runAsync(runCount, displayAllLines);
 	
 
-	console.log(`Final result after (${runCount}) runs was: [${finalResult}]`);
 
-	let cityNames = finalResult.map(c =>cities[c].name);
-	console.log(`... as country names was:\n (${cityNames}`);
+	/* 
+	***** TURN OF THE SET INTERVAL AND FINALRESULT
+	*/
+	// let finalResult = algo.run(runCount);
+	// setInterval(getNextGen(algo), finalResult.length*100 + 100, finalResult);
+
+	// console.log(`Final result after (${runCount}) runs was: [${finalResult}]`);
+
+	// let cityNames = finalResult.map(c =>cities[c].name);
+	
+	// console.log(`... as country names was:\n (${cityNames}`);
 
 
-	let finalResult = algo.run(runCount);
-	let bestRoute = finalResult.map(city => cities[city]);
+	
+
+	// let bestRoute = finalResult.map(city => cities[city]);
 
 
 	let capitalsCircles = svg.append("g")
