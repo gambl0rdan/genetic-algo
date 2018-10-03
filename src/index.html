@@ -2,17 +2,24 @@
 <meta charset="utf-8">
 
 <body>
-	<div class="categories" style="background: black;
+	<!-- <div class="categories" style="background: black;
 							    color: white;
 							    text-align: center;
 							    padding-top: 50px;">
 		Number of city: <input style="width:50px; margin-bottom: 20px" type="text" value=""><br>
 		Number of generation: <input style="width:70px; margin-bottom: 20px" type="text" value=""><br>
-	</div>
+	</div> -->
 	<div style="background: black;
-							    color: white;
-							    text-align: center;">
-		Distance: <span class="result"></span> km
+			    color: white;
+			    font-size: 20px;
+			    text-align: center;
+			    padding-top: 50px;">
+		Distance: <span id="result"
+						style="font-weight: bold;
+							   font-style: italic;
+					    	   font-size: 30px;">
+					    	
+				   </span> km
 	</div>
 	<div id="map"></div>
 	
@@ -26,9 +33,6 @@
 
 		let projection = d3.geoEquirectangular()
 		    .translate([width / 2, height / 2.6]);
-		    
-		var plane_path = d3.geoPath()
-		        .projection(projection);
 
 		var svg = d3.select("#map").append("svg")
 		    .attr("width", width)
@@ -56,6 +60,8 @@
 		      .attr("d", path)
 		      .attr("fill", "#787878");
 		}) 
+
+		
 
 	 
 	</script>

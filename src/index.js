@@ -6,9 +6,8 @@ import CSVLoader from './data.js';
 // import { geoPath } from 'd3-geo';
 
 let genAlgo;
-let tourSize = 20;
-let runCount = 20;
-
+let tourSize = 50;
+let runCount = 1000;
 
 // this is the main methed once all the data loaded
 let loadRespCallback = (cities, vectors) => {
@@ -17,8 +16,6 @@ let loadRespCallback = (cities, vectors) => {
       lessFitProb : 0.35,
       populationSize : vectors.length
     }
-
-
 
 	let algo = new GeneticAlgo(vectors, settings);  
 	let results = {
@@ -29,30 +26,28 @@ let loadRespCallback = (cities, vectors) => {
 	algo.initialise();
 
 	let routePath = d3.geoPath()
-	    .projection(projection);
+	    			  .projection(projection);
 
-	
 
 	   //runNextGen
 	   //Call the breed and get the next best route
 	   //call displayAllLines
 	let connectingLines = svg.append("g");
 
-	let displayAllLines = (genFittestRoute) => {
+	let displayAllLines = (curFittestRoute) => {
 		connectingLines.html(""); //clear the Line String
-		let genFittestCoords = genFittestRoute.map(route => cities[route]);
+		let curFittestCoords = curFittestRoute.map(route => cities[route]);
 
-		for(let i=0; i<genFittestCoords.length; i++) { 
-			let citiesPair = genFittestCoords.slice(i, i+2);
+		for(let i=0; i<curFittestCoords.length; i++) { 
+			let citiesPair = curFittestCoords.slice(i, i+2);
 			
-
 			let coordPair;
 
 			// extra check to make sure the last country will be draw connected with the first one
-			if (i < genFittestCoords.length - 1){
+			if (i < curFittestCoords.length - 1){
 			 	coordPair = citiesPair.map((city) => [city.lon, city.lat]);
 			} else{
-				coordPair = [[genFittestCoords[0].lon, genFittestCoords[0].lat], [genFittestCoords[i].lon, genFittestCoords[i].lat]]
+				coordPair = [[curFittestCoords[0].lon, curFittestCoords[0].lat], [curFittestCoords[i].lon, curFittestCoords[i].lat]]
 			}
 
 			let display = () => {
@@ -95,16 +90,20 @@ let loadRespCallback = (cities, vectors) => {
 	
 		console.log(`Generation [${algo.generation}]. Fittest of gen [${genFittestPath}], Fittest overall [${results.curFittestPath}]`);
 		
+		
+		// console.log(`curFittestRoute is: ${results.curFittestPath}`);
+		//method to round up number to 3 decimals
+		document.getElementById('result').innerHTML = Math.round(results.curFittestPath*1000)/1000; 
+
+
+
 		displayAllLines(results.curFittestRoute);
 		// displayAllLines(genFittestRoute);
 	}
 
+
 	let runTimer = setInterval(getNextGen, 250, algo, results);
 	
-	// let finalResult = algo.runAsync(runCount, (route) => setTimeout(displayAllLines, 1000, route));
-	// let finalResult = algo.runAsync(runCount, displayAllLines);
-	
-
 
 	/* 
 	***** TURN OF THE SET INTERVAL AND FINALRESULT
@@ -116,12 +115,10 @@ let loadRespCallback = (cities, vectors) => {
 
 	// let cityNames = finalResult.map(c =>cities[c].name);
 	
-	// console.log(`... as country names was:\n (${cityNames}`);
-
-
-	
+	// console.log(`... as country names was:\n (${cityNames}`);	
 
 	// let bestRoute = finalResult.map(city => cities[city]);
+
 
 
 	let capitalsCircles = svg.append("g")
@@ -131,7 +128,7 @@ let loadRespCallback = (cities, vectors) => {
 	  .append("circle")
 	  .attr("cx", (row) => projection([row.lon, row.lat])[0])
 	  .attr("cy", (row) => projection([row.lon, row.lat])[1])
-	  .attr("r", 3)
+	  .attr("r", 4)
 	  .attr("fill", "#FFFAF0");
 	  // .attr("debug", (row) => JSON.stringify(row))
 	  // .attr("debug2", (row) => JSON.stringify(projection([+row.lng, +row.lat])))
@@ -141,49 +138,3 @@ let loadRespCallback = (cities, vectors) => {
 
 let loader = new CSVLoader();
 let res = loader.load(tourSize, loadRespCallback);
-
-let width = window.innerWidth,
-    height = window.innerHeight,
-    centered,
-    clicked_point;
-
-let projection = d3.geoEquirectangular()
-					.translate([width/2	, height/2]);
-
-
-   				  
-let plane_path = d3.geoPath()
-        		   .projection(projection);
-
-let svg = d3.select("#map").append("svg")
-						   .attr("width", width)
-						   .attr("height", height)
-						   .attr("class", "map");
-
-let rectangle = svg.append("rect")
-                            .attr("x", 0)
-                            .attr("y", 0)
-                            .attr("width", width)
-                            .attr("height", height)
-                            .attr("fill", "black");
-
-    
-let g = svg.append("g");
-let path = d3.geoPath()
-    .projection(projection);
-    
-// load and display the World
-d3.json("https://unpkg.com/world-atlas@1/world/110m.json", function(error, topology) {
-    g.selectAll("path")
-      .data(topojson.feature(topology, topology.objects.countries)
-          .features)
-      .enter()
-      .append("path")
-      .attr("d", path)
-      .attr("fill", "#787878")
-      ;
-});
-
-
-
-
