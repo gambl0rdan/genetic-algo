@@ -6,8 +6,8 @@ import CSVLoader from './data.js';
 // import { geoPath } from 'd3-geo';
 
 let genAlgo;
-let tourSize = 50;
-let runCount = 1000;
+let tourSize = 20;
+let runCount = 200;
 
 // this is the main methed once all the data loaded
 let loadRespCallback = (cities, vectors) => {
@@ -59,7 +59,7 @@ let loadRespCallback = (cities, vectors) => {
 					.attr("stroke", "#FFFAF0")
 					.attr("stroke-width", 3)
 			}
-			setTimeout(display, i*5); //set timeout to draw a line between 2 cities
+			setTimeout(display, i*50); //set timeout to draw a line between 2 cities
 		}
 	}
 
@@ -80,8 +80,9 @@ let loadRespCallback = (cities, vectors) => {
 
 
 		let newPopulation = runIterationRes[0];
-		let genFittestPath = runIterationRes[1];
 		let genFittestRoute = newPopulation[0];
+		let genFittestPath = runIterationRes[1];
+		
 
 		if(genFittestPath < results.curFittestPath){
 			results.curFittestPath= genFittestPath;

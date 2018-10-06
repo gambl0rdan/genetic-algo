@@ -69,15 +69,7 @@ class GeneticAlgo {
 		
 		let genFittestRoute = newPopulation[0]; //[1,6,4, 9]
 		let genFittestPath = this.calculateFitness(genFittestRoute);
-		
-		// if(genFittestPath < curFittestPath){
-		// 	curFittestPath = genFittestPath;
-		// 	curFittestRoute = genFittestRoute; 	
-		// }
 	
-		// console.log(`Generation [${this.generation}]. Fittest of gen [${genFittestPath}], Fittest overall [${curFittestPath}]`);
-		
-		// this.generation++;
 		this.population = newPopulation;
 		return [newPopulation, genFittestPath];
 
