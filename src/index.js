@@ -1,5 +1,5 @@
 // var algos = require('./algos.js');
-import GeneticAlgo from './algos.js';
+import genetic from './algos/genetic.js';
 // var loaders = require('./csv_loader.js');
 // var loaders = require('./data.js');
 import CSVLoader from './data.js';
@@ -17,7 +17,7 @@ let loadRespCallback = (cities, vectors) => {
       populationSize : vectors.length
     }
 
-	let algo = new GeneticAlgo(vectors, settings);  
+	let algo = new genetic.GeneticAlgo(vectors, settings);  
 	let results = {
 		curFittestRoute : [],
 		curFittestPath : Number.MAX_SAFE_INTEGER

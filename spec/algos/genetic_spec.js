@@ -1,5 +1,5 @@
 describe("Algos", function() {
-  var algos = require('../../src/algos.js');
+  var algos = require('../../src/algos/genetic.js');
   let genAlgo;
   
   let distanceValues = [
@@ -99,7 +99,6 @@ describe("Algos", function() {
     actRes.forEach(ind => expect(ind).toEqual(jasmine.arrayContaining([0, 1, 2, 3])));
     
   });
-
 
 
   it("Shouldshufflfe an item by a given amt", function () {

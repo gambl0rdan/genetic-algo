@@ -1,9 +1,12 @@
+// const sinon = require('sinon');  
+// const d3 = require('d3');
 // describe("CVS Utils", function() {
-  
-//   var csv_loader = require('../../src/csv_loader.js');
+// var data = require('../../src/data.js');
+
  
 //   beforeEach(function() {
-  	
+//     const request = require('request');
+//     sinon.stub(request, 'get').yields(null, {}, "<h1>Tarun lalwani</h1>"); 	
     
 //   });
 
@@ -15,7 +18,7 @@
 //         expect(vectors.length).toEqual(5);
 //       }
 
-//       let loader = new csv_loader.CSVLoader();
+//       let loader = new data.CSVLoader();
 //       loader.load(resp, 5);
 
 //   });
