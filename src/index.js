@@ -15,7 +15,7 @@ let runCount = 2000;
 let loadRespCallback = (cities, vectors) => {
 	let settings = {
       mutateProb : 0.25,
-      lessFitProb : 0.35,
+      lessFitProb : 0.15,
       populationSize : vectors.length
     }
 
