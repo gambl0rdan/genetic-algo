@@ -1,13 +1,15 @@
 // var algos = require('./algos/genetic.js');
 import GeneticAlgo from './algos/genetic.js';
+
+import NearestNeighbourAlgo from './algos/nearest_neighbour.js';
 // var loaders = require('./csv_loader.js');
 // var loaders = require('./data.js');
 import CSVLoader from './data.js';
 // import { geoPath } from 'd3-geo';
 
 let genAlgo;
-let tourSize = 20;
-let runCount = 200;
+let tourSize = 50;
+let runCount = 2000;
 
 // this is the main methed once all the data loaded
 let loadRespCallback = (cities, vectors) => {
@@ -23,8 +25,22 @@ let loadRespCallback = (cities, vectors) => {
 		curFittestPath : Number.MAX_SAFE_INTEGER
 	};
 
-	algo.initialise();
+	// if the startWithNearestNeighbour = false, it means always start with pure genetic algo
+	let startWithNearestNeighbour = false;
+	if(startWithNearestNeighbour){
+		 // nn means nearest Neighbour
 
+		let nnAlgo = new NearestNeighbourAlgo(vectors, settings);
+		let nnPopulation = nnAlgo.run();
+		algo.initialise(nnPopulation);
+
+	} else{
+		algo.initialise();
+
+	}
+
+
+	
 	let routePath = d3.geoPath()
 	    			  .projection(projection);
 
@@ -59,7 +75,7 @@ let loadRespCallback = (cities, vectors) => {
 					.attr("stroke", "#FFFAF0")
 					.attr("stroke-width", 3)
 			}
-			setTimeout(display, i*50); //set timeout to draw a line between 2 cities
+			setTimeout(display, i * 1); //set timeout to draw a line between 2 cities
 		}
 	}
 
@@ -102,8 +118,8 @@ let loadRespCallback = (cities, vectors) => {
 		// displayAllLines(genFittestRoute);
 	}
 
-
-	let runTimer = setInterval(getNextGen, 250, algo, results);
+	let mainInterval = (tourSize * 1) + 50;
+	let runTimer = setInterval(getNextGen, mainInterval, algo, results);
 	
 
 	/* 

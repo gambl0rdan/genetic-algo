@@ -1,4 +1,4 @@
-// class NearestNeighbourAlgo {
+class NearestNeighbourAlgo {
 	constructor(distanceValues, settings){
 		this.distanceValues = distanceValues;
 		this.cityCount = distanceValues.length;
@@ -101,6 +101,8 @@
 	}
 
 }
-module.exports.NearestNeighbourAlgo = NearestNeighbourAlgo;
 // module.exports.NearestNeighbourAlgo = NearestNeighbourAlgo;
+// module.exports.NearestNeighbourAlgo = NearestNeighbourAlgo;
+
+export default NearestNeighbourAlgo = NearestNeighbourAlgo;
 

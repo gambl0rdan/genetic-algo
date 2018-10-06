@@ -8,8 +8,8 @@ class GeneticAlgo {
 		this.distArray = [];
 	}
 
-	initialise(){
-		this.initialPopulation = this.genOriginalPopulation(this.distanceValues);
+	initialise(population){
+		this.initialPopulation = population || this.genOriginalPopulation(this.distanceValues);
 		this.distArray = this.generateLogarithmicPriorityArray(this.settings.populationSize);
 		console.log("Initialise Complete!");
 	}
