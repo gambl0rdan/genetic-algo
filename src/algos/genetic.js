@@ -329,7 +329,7 @@ crossover(x, y) {
 	} 
 }
 
-module.exports.GeneticAlgo = GeneticAlgo;
-// export default GeneticAlgo;
+// module.exports.GeneticAlgo = GeneticAlgo;
+export default GeneticAlgo;
 
 

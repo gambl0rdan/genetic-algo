@@ -1,5 +1,5 @@
 // let fs = require('fs'); //Mangaes file ops from JS core
-let d3 = require('d3'); // Handle CSVs
+// let d3 = require('d3'); // Handle CSVs
 
 // Creates an N * N matrix of distances between each city
 // inefficient but double loopd through our tour
@@ -57,5 +57,5 @@ class CSVLoader {
 
 }
 
-// export default CSVLoader;
-module.exports.CSVLoader = CSVLoader;
+export default CSVLoader;
+// module.exports.CSVLoader = CSVLoader;
