@@ -2,13 +2,64 @@
 <meta charset="utf-8">
 
 <body>
-	<!-- <link rel="stylesheet" href="styles.css"> -->
-	<!-- <script type="text/javascript" src="algos.js"></script> -->
-<!-- 	<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script> -->
-	<!-- <script src="data.js"></script> -->
+	<!-- <div class="categories" style="background: black;
+							    color: white;
+							    text-align: center;
+							    padding-top: 50px;">
+		Number of city: <input style="width:50px; margin-bottom: 20px" type="text" value=""><br>
+		Number of generation: <input style="width:70px; margin-bottom: 20px" type="text" value=""><br>
+	</div> -->
+	<div style="background: black;
+			    color: white;
+			    font-size: 20px;
+			    text-align: center;
+			    padding-top: 50px;">
+		Distance: <span id="result"
+						style="font-weight: bold;
+							   font-style: italic;
+					    	   font-size: 30px;">
+					    	
+				   </span> km
+	</div>
+	<div id="map"></div>
+	
 	<script type="module" src="index.js"></script>
-	<!-- <script src="https://d3js.org/d3.v5.js"></script> -->
-	<script src="https://d3js.org/d3.v4.js"></script>
-	<!-- <script src="https://unpkg.com/topojson-client@3"></script> -->
+	<!-- <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script> -->
+	<script src="https://d3js.org/d3.v5.js"></script>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	<script>
+		let width = window.innerWidth,
+		    height = window.innerHeight;
+
+		let projection = d3.geoEquirectangular()
+		    .translate([width / 2, height / 2.6]);
+
+		var svg = d3.select("#map").append("svg")
+		    .attr("width", width)
+		    .attr("height", height)
+		    .attr("class", "map");
+
+		let rectangle = svg.append("rect")
+				                    .attr("x", 0)
+				                    .attr("y", 0)
+				                    .attr("width", width)
+				                    .attr("height", height)
+				                    .attr("fill", "black");
+		    
+		var g = svg.append("g");
+		var path = d3.geoPath()
+		    .projection(projection);
+		    
+		// load and display the World
+		d3.json("https://unpkg.com/world-atlas@1/world/110m.json").then(function(topology) {
+			g.selectAll("path")
+		      .data(topojson.feature(topology, topology.objects.countries)
+		          .features)
+		      .enter()
+		      .append("path")
+		      .attr("d", path)
+		      .attr("fill", "#787878");
+		}) 
+	</script>
 </body>
-</html>
+</html>	

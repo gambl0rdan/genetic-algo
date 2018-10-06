@@ -7,12 +7,10 @@ function getDistanceMatrix(locations, tourSize){
 	for(let y = 0; y < tourSize; y++) {
 		for(let x = 0; x < tourSize; x++){
 			let dt = Math.abs(distance(locations[y], locations[x]));
-			
 			distances[y][x] = dt;
 			distances[x][y] = dt;
 		}
-		  }
-	
+	}
 	return distances;
 }
 
@@ -53,14 +51,9 @@ class CSVLoader {
 			let vectors = getDistanceMatrix(cities, tourSize);
     		callback(cities, vectors); 
 		}) 
-		
-			
-		
 		console.log("Finish load");
-		
 	}
 
 }
 
-// module.exports.CSVLoader = CSVLoader;
 export default CSVLoader;
