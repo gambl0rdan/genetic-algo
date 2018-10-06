@@ -59,7 +59,7 @@ let loadRespCallback = (cities, vectors) => {
 					.attr("stroke", "#FFFAF0")
 					.attr("stroke-width", 3)
 			}
-			setTimeout(display, i*50); //set timeout to draw a line between 2 cities
+			setTimeout(display, i*5); //set timeout to draw a line between 2 cities
 		}
 	}
 
@@ -98,12 +98,12 @@ let loadRespCallback = (cities, vectors) => {
 
 
 
-		displayAllLines(results.curFittestRoute);
-		// displayAllLines(genFittestRoute);
+		// displayAllLines(results.curFittestRoute);
+		displayAllLines(genFittestRoute);
 	}
 
 
-	let runTimer = setInterval(getNextGen, 250, algo, results);
+	let runTimer = setInterval(getNextGen,100, algo, results);
 	
 
 	/* 
